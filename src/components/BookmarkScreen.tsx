@@ -48,15 +48,6 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
     generalQuestions: Question[];
   }> = {};
 
-  // Always initialize Genesis so it appears first as requested
-  const genesisMeta = ALL_BIBLE_BOOKS.find(b => b.id === 'genesis')!;
-  groupedData['genesis'] = {
-    bookTitle: genesisMeta.title,
-    bookTitleEn: genesisMeta.englishTitle,
-    chapters: {},
-    generalQuestions: [],
-  };
-
   savedList.forEach((q) => {
     const bookId = q.bookId || 'genesis';
     const bookMeta = ALL_BIBLE_BOOKS.find(b => b.id === bookId);
@@ -87,7 +78,7 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
     const count =
       Object.values(group.chapters).reduce((acc, list) => acc + list.length, 0) +
       group.generalQuestions.length;
-    return count > 0 || (k === 'genesis' && savedList.length === 0);
+    return count > 0;
   });
 
   // LEVEL 3: View Saved Questions inside a specific Chapter
@@ -373,8 +364,8 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
             {isEn
-              ? `Select Genesis or any book to view chapters (${totalAllSaved} saved)`
-              : `அதிகாரங்களைப் பார்க்க ஆதியாகமம் அல்லது நூலைத் தேர்ந்தெடுக்கவும் (${totalAllSaved})`}
+              ? `Review and practice bookmarked questions (${totalAllSaved} saved)`
+              : `சேமித்த வினாக்களை மதிப்பாய்வு செய்து பயிற்சி செய்யவும் (${totalAllSaved})`}
           </p>
         </div>
 
@@ -392,45 +383,63 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
         )}
       </div>
 
-      {/* Books List: Genesis first */}
-      <div className="space-y-2.5">
-        {bookKeys.map((bookKey) => {
-          const group = groupedData[bookKey];
-          const chapterNumbers = Object.keys(group.chapters).map(Number);
-          const totalCount = chapterNumbers.reduce((acc, ch) => acc + group.chapters[ch].length, 0) + group.generalQuestions.length;
+      {/* Books List or Empty State */}
+      {totalAllSaved === 0 ? (
+        <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 text-center space-y-3.5 my-4">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mx-auto flex items-center justify-center">
+            <Bookmark className="w-7 h-7" />
+          </div>
+          <h3 className="text-base font-bold text-slate-100">
+            {isEn ? 'No Saved Questions Yet' : 'சேமித்த கேள்விகள் எதுவும் இல்லை'}
+          </h3>
+          <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+            {isEn
+              ? 'Tap the bookmark icon 🔖 during any quiz round to save questions here for quick practice.'
+              : 'வினாடி வினா விளையாடும் போது 🔖 புக்மார்க் குறியீட்டைத் தட்டி முக்கிய வினாக்களை இங்கே சேமித்துப் பயிற்சி செய்யலாம்.'}
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-2.5">
+          {bookKeys.map((bookKey) => {
+            const group = groupedData[bookKey];
+            const chapterNumbers = Object.keys(group.chapters).map(Number);
+            const totalCount =
+              chapterNumbers.reduce((acc, ch) => acc + group.chapters[ch].length, 0) +
+              group.generalQuestions.length;
 
-          return (
-            <button
-              key={bookKey}
-              onClick={() => {
-                sounds.playTick();
-                onSelectBookKey(bookKey);
-              }}
-              className="w-full text-left p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 transition-all flex items-center justify-between cursor-pointer active:scale-[0.99] shadow-lg shadow-black/20"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                  <BookOpen className="w-5 h-5" />
+            return (
+              <button
+                key={bookKey}
+                onClick={() => {
+                  sounds.playTick();
+                  onSelectBookKey(bookKey);
+                }}
+                className="w-full text-left p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 transition-all flex items-center justify-between cursor-pointer active:scale-[0.99] shadow-lg shadow-black/20"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">
+                      {isEn ? group.bookTitleEn : group.bookTitle}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      {isEn ? group.bookTitle : group.bookTitleEn} •{' '}
+                      <span className="text-amber-400 font-semibold">{totalCount} {isEn ? 'saved' : 'கேள்விகள்'}</span>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white">
-                    {isEn ? group.bookTitleEn : group.bookTitle}
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    {isEn ? group.bookTitle : group.bookTitleEn} •{' '}
-                    <span className="text-amber-400 font-semibold">{totalCount} {isEn ? 'saved' : 'கேள்விகள்'}</span>
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold">
-                <span>{chapterNumbers.length} {isEn ? 'chapters' : 'அதிகாரங்கள்'}</span>
-                <ChevronRight className="w-4 h-4" />
-              </div>
-            </button>
-          );
-        })}
-      </div>
+                <div className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold">
+                  <span>{chapterNumbers.length} {isEn ? 'chapters' : 'அதிகாரங்கள்'}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

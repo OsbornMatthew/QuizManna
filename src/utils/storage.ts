@@ -49,19 +49,11 @@ export function loadUserStats(): UserStats {
     const parsed = JSON.parse(raw);
     let savedIds: string[] = Array.isArray(parsed.savedQuestionIds) ? parsed.savedQuestionIds : [];
 
-    // Filter out old hardcoded dummy placeholder IDs if saved questions store is empty
+    // Filter out old hardcoded dummy placeholder IDs 'gen_1_1', 'gen_1_2', 'gen_1_3'
     const savedMap = getSavedQuestionsMap();
-    if (Object.keys(savedMap).length === 0) {
-      // If legacy had only the 3 dummy genesis IDs, clear them so user has clean slate
-      if (
-        savedIds.length === 3 &&
-        savedIds.includes('gen_1_1') &&
-        savedIds.includes('gen_1_2') &&
-        savedIds.includes('gen_1_3')
-      ) {
-        savedIds = [];
-      }
-    }
+    savedIds = savedIds.filter(
+      (id) => !['gen_1_1', 'gen_1_2', 'gen_1_3'].includes(id) || !!savedMap[id]
+    );
 
     const stats: UserStats = {
       ...getInitialStats(),
@@ -205,19 +197,12 @@ export function getBookmarkedQuestions(): Question[] {
   const result: Question[] = [];
   const seenIds = new Set<string>();
 
-  // First collect questions in stats.savedQuestionIds order
+  // Only collect questions from map that the user actually saved
   for (const id of stats.savedQuestionIds) {
     if (seenIds.has(id)) continue;
     if (map[id]) {
       result.push(map[id]);
       seenIds.add(id);
-    } else {
-      const fallback = ALL_QUESTIONS_POOL.find((q) => q.id === id);
-      if (fallback) {
-        result.push(fallback);
-        map[id] = fallback; // sync cache
-        seenIds.add(id);
-      }
     }
   }
 
@@ -226,7 +211,9 @@ export function getBookmarkedQuestions(): Question[] {
     if (!seenIds.has(id)) {
       result.push(q);
       seenIds.add(id);
-      stats.savedQuestionIds.push(id);
+      if (!stats.savedQuestionIds.includes(id)) {
+        stats.savedQuestionIds.push(id);
+      }
     }
   }
 

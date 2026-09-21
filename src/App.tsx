@@ -279,7 +279,7 @@ export const App: React.FC = () => {
   // Calculate Header Title accurately per screen and drilldown level
   const getHeaderTitle = () => {
     if (currentScreen === 'home') {
-      return 'WisdomX';
+      return 'QuizManna';
     }
     if (currentScreen === 'quiz') {
       return activeQuizTitle;
