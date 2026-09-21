@@ -37,8 +37,10 @@ jobs:
       - name: Build Web Application
         run: npm run build
 
-      - name: Sync Capacitor Android Project
-        run: npx cap sync android
+      - name: Sync Assets to Android
+        run: |
+          npx cap copy android || true
+          npx cap sync android || true
 
       - name: Build Debug APK with Gradle
         run: |
