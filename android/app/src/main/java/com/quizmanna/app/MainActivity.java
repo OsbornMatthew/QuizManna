@@ -1,4 +1,4 @@
-package com.wisdomx.tamilbiblequiz;
+package com.quizmanna.app;
 
 import com.getcapacitor.BridgeActivity;
 
