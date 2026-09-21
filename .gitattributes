@@ -1,0 +1,11 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Executable scripts must use LF line endings
+*.sh text eol=lf
+gradlew text eol=lf
+android/gradlew text eol=lf
+
+# Windows scripts use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

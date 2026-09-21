@@ -23,8 +23,9 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        def targetJava = JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+        sourceCompatibility targetJava
+        targetCompatibility targetJava
     }
 }
 
@@ -67,7 +68,8 @@ try {
 
 android {
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        def targetJava = JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+        sourceCompatibility targetJava
+        targetCompatibility targetJava
     }
 }
