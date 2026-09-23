@@ -96,7 +96,7 @@ export const App: React.FC = () => {
   };
 
   // Step-by-step back handler coordinating all screens and drilldown levels
-  const handleBack = useCallback(() => {
+  const handleBack = useCallback((): boolean => {
     sounds.playTick();
 
     // 1. Inside Saved Screen drilldown
@@ -104,12 +104,12 @@ export const App: React.FC = () => {
       if (savedChapterNum !== null) {
         // Step back from Questions to Chapters
         setSavedChapterNum(null);
-        return;
+        return true;
       }
       if (savedBookKey !== null) {
         // Step back from Chapters to Books list
         setSavedBookKey(null);
-        return;
+        return true;
       }
     }
 
@@ -122,13 +122,27 @@ export const App: React.FC = () => {
           if (chIdx !== -1) return prev.slice(0, chIdx + 1);
           return ['home', 'books', 'chapters'];
         });
-        return;
+        return true;
       }
     }
 
     // 3. Normal screen stack popping (e.g. quiz -> chapters -> books -> home)
-    popScreen();
-  }, [currentScreen, savedBookKey, savedChapterNum, selectedBook]);
+    if (screenStack.length > 1) {
+      popScreen();
+      return true;
+    }
+
+    // Already at root home screen
+    return false;
+  }, [currentScreen, savedBookKey, savedChapterNum, selectedBook, screenStack.length]);
+
+  // Expose back handler to Android native layer via window.__quizMannaHandleBack
+  useEffect(() => {
+    (window as any).__quizMannaHandleBack = handleBack;
+    return () => {
+      delete (window as any).__quizMannaHandleBack;
+    };
+  }, [handleBack]);
 
   // Synchronize browser and hardware back navigation
   useEffect(() => {
@@ -318,7 +332,7 @@ export const App: React.FC = () => {
   const activeBook = selectedBook || ALL_BIBLE_BOOKS.find((b) => b.id === 'genesis') || ALL_BIBLE_BOOKS[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#080B11] text-slate-100 font-sans selection:bg-amber-500/30 selection:text-amber-300">
+    <div className="h-[100dvh] max-h-[100dvh] w-full flex flex-col overflow-hidden bg-[#080B11] text-slate-100 font-sans selection:bg-amber-500/30 selection:text-amber-300">
       {/* Top Header with Step-by-Step Back Navigation */}
       <Header
         title={getHeaderTitle()}
@@ -330,8 +344,8 @@ export const App: React.FC = () => {
         onChangeLanguage={handleChangeLanguage}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col">
+      {/* Main Content Area - Scrollable between header and bottom nav */}
+      <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden relative flex flex-col">
         {currentScreen === 'home' && (
           <HomeScreen
             stats={stats}
@@ -430,7 +444,7 @@ export const App: React.FC = () => {
 
       {/* UNIFORM Bottom Navigation Bar - Perfectly even layout */}
       {currentScreen !== 'quiz' && (
-        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#080B11]/95 backdrop-blur-xl border-t border-slate-800/80 px-2 py-2 safe-area-bottom shadow-2xl">
+        <nav className="shrink-0 z-40 w-full bg-[#080B11]/98 backdrop-blur-xl border-t border-slate-800/80 px-2 py-2 safe-area-bottom shadow-2xl">
           <div className="max-w-md mx-auto grid grid-cols-4 gap-1 items-center">
             {/* 1. Home */}
             <button

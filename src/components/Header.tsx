@@ -42,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#080B11]/95 backdrop-blur-xl border-b border-slate-800/80 px-4 py-3 safe-area-top shadow-lg shadow-black/40">
+    <header className="shrink-0 z-40 w-full bg-[#080B11]/98 backdrop-blur-xl border-b border-slate-800/80 px-4 py-3 safe-area-top shadow-lg shadow-black/40">
       <div className="max-w-md mx-auto flex items-center justify-between">
         {/* Left Side */}
         <div className="flex items-center gap-2.5">

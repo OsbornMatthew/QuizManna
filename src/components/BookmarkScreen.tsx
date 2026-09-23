@@ -92,7 +92,7 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
     const chapterQuestions = bookGroup.chapters[selectedChapterNum] || [];
 
     return (
-      <div className="flex-1 overflow-y-auto pb-24 px-4 pt-3 max-w-md mx-auto w-full space-y-4">
+      <div className="flex-1 pb-6 px-4 pt-3 max-w-md mx-auto w-full space-y-4">
         {/* Navigation Breadcrumb Bar */}
         <div className="flex items-center justify-between pb-1 border-b border-slate-800">
           <button
@@ -242,7 +242,7 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
       + bookGroup.generalQuestions.length;
 
     return (
-      <div className="flex-1 overflow-y-auto pb-24 px-4 pt-3 max-w-md mx-auto w-full space-y-4">
+      <div className="flex-1 pb-6 px-4 pt-3 max-w-md mx-auto w-full space-y-4">
         {/* Navigation Breadcrumb Bar */}
         <div className="flex items-center justify-between pb-1 border-b border-slate-800">
           <button
@@ -354,7 +354,7 @@ export const BookmarkScreen: React.FC<BookmarkScreenProps> = ({
   const totalAllSaved = savedList.length;
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
+    <div className="flex-1 pb-6 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

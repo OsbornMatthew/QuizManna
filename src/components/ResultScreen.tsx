@@ -78,7 +78,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
+    <div className="flex-1 pb-6 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
       {/* Top Victory Card */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 p-6 text-center shadow-2xl shadow-black/60">
         <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30 mb-3 animate-bounce">

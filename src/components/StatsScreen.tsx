@@ -27,7 +27,7 @@ export const StatsScreen: React.FC<StatsScreenProps> = ({
   const isEn = language === 'en';
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
+    <div className="flex-1 pb-6 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
       <div>
         <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
           <Award className="w-5 h-5 text-amber-400" />

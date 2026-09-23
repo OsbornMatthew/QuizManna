@@ -79,7 +79,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const daily = dailyVerses[dayOfYear % dailyVerses.length];
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
+    <div className="flex-1 pb-6 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
       {/* Daily Scripture Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500/15 via-slate-900/90 to-indigo-950/60 border border-amber-500/30 p-4 shadow-xl shadow-black/40">
         <div className="absolute -top-12 -right-12 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />

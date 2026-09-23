@@ -48,7 +48,7 @@ export const BooksScreen: React.FC<BooksScreenProps> = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
+    <div className="flex-1 pb-6 px-4 pt-4 max-w-md mx-auto w-full space-y-4">
       {/* Header Banner */}
       <div className="flex items-center justify-between">
         <div>
